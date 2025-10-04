@@ -1,0 +1,150 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// BetterAuth User Model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  image     String?
+  role      String   @default("IMPLEMENTER")
+  organization String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  accountId         String
+  providerId        String
+  accessToken       String?
+  refreshToken      String?
+  idToken           String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope             String?
+  password          String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@map("accounts")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verifications")
+}
+
+model Program {
+  id          String    @id @default(cuid())
+  name        String
+  tokenAddr   String
+  ownerAddr   String
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  milestones Milestone[]
+
+  @@map("programs")
+}
+
+model Milestone {
+  id        String   @id @default(cuid())
+  programId String
+  name      String
+  amount    Decimal  @db.Decimal(18, 6)
+  criteria  Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  program      Program       @relation(fields: [programId], references: [id], onDelete: Cascade)
+  disbursements Disbursement[]
+
+  @@map("milestones")
+}
+
+model Disbursement {
+  id         String   @id @default(cuid())
+  milestoneId String
+  kind       String
+  amount     Decimal  @db.Decimal(18, 6)
+  createdAt  DateTime @default(now())
+
+  milestone Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  pods      Pod[]
+
+  @@map("disbursements")
+}
+
+model Beneficiary {
+  id             String   @id @default(cuid())
+  nationalIdHash Bytes
+  phoneLast4     String?
+  region         String?
+  kycRef         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  pods Pod[]
+
+  @@map("beneficiaries")
+}
+
+model Pod {
+  id             String    @id @default(cuid())
+  disbursementId String
+  beneficiaryId  String
+  gpsLat         Float?
+  gpsLng         Float?
+  photoUri       String?
+  ts             DateTime  @default(now())
+  podHash        Bytes
+  status         String    @default("pending")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  disbursement Disbursement @relation(fields: [disbursementId], references: [id], onDelete: Cascade)
+  beneficiary  Beneficiary  @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  @@map("pods")
+}
