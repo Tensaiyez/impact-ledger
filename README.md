@@ -1,10 +1,12 @@
-# ImpactLedger Web App
+# Impact Ledger
 
 A clean, fast PWA-first dashboard for transparent aid tracking built with Next.js 14, TypeScript, Tailwind CSS, and shadcn/ui.
 
 ## 🌍 About ImpactLedger
 
-ImpactLedger is a **transparent aid tracking platform** designed to bring accountability and verifiability to humanitarian and development organizations. It addresses the critical challenge of ensuring that aid funds actually reach their intended beneficiaries through a combination of modern web technology, offline-first design, and cryptographic verification.
+ImpactLedger is a web-based transparency and verification platform for global aid distribution. It ensures that every dollar of humanitarian or donor funding can be tracked, verified, and publicly audited — from the moment it is sent to an NGO to the moment it reaches a beneficiary in the field.
+
+It combines blockchain technology, cryptographic proofs, and an offline-first web app to bring transparency and accountability to aid organizations working in regions with limited internet connectivity and high logistical complexity (like rural Ethiopia or East Africa).
 
 ### The Problem
 - **Lack of transparency**: Donors rely on unverifiable reports from NGOs
