@@ -74,7 +74,7 @@ ImpactLedger provides an **end-to-end verifiable system** that tracks aid throug
 
 1. **Clone and install dependencies:**
    ```bash
-   cd impactledger-web
+   cd impact-ledger
    npm install
    ```
 
@@ -123,15 +123,21 @@ src/
 │   ├── program-form.tsx  # Program creation
 │   ├── milestone-form.tsx # Milestone creation
 │   └── data-initializer.tsx # Sample data setup
-└── lib/                  # Utilities and configurations
-    ├── data.ts           # In-memory data stores
-    ├── auth.ts           # Mock authentication
-    ├── auth-client.ts    # Auth client hooks
-    ├── schema.ts         # Zod validators
-    ├── merkle.ts         # Merkle tree operations (future)
-    ├── contracts.ts      # Smart contract configs (future)
-    ├── wagmi.ts          # Blockchain configuration (future)
-    └── offline.ts        # Offline queue management
+├── lib/                  # Utilities and configurations
+│   ├── data.ts           # In-memory data stores
+│   ├── auth.ts           # Mock authentication
+│   ├── auth-client.ts    # Auth client hooks
+│   ├── validation.ts     # Input validation and sanitization
+│   └── offline.ts        # Offline queue management
+├── contracts/            # Smart contracts (MVP - future integration)
+│   ├── AidProgram.sol    # Main aid program contract
+│   ├── deployments/      # Contract deployment configs
+│   └── abis/            # Contract ABIs
+└── blockchain/           # Blockchain utilities (MVP - future integration)
+    ├── merkle.ts         # Merkle tree operations
+    ├── contracts.ts      # Smart contract configurations
+    ├── wagmi.ts          # Blockchain client setup
+    └── signer.ts         # Digital signature handling
 ```
 
 ## Key Features
@@ -219,6 +225,8 @@ npx tsc --noEmit
 - ✅ In-memory data storage
 
 ### Phase 2 (Future)
+- 🔄 Implement smart contracts in `contracts/` folder
+- 🔄 Integrate blockchain utilities from `blockchain/` folder
 - 🔄 Smart contract integration (Polygon/Base testnets)
 - 🔄 Real database (PostgreSQL + Prisma)
 - 🔄 BetterAuth for production authentication
